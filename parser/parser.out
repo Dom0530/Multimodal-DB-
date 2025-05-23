@@ -1,0 +1,913 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> programa
+Rule 1     programa -> sentencia
+Rule 2     sentencia -> CREATE TABLE ID LPAREN def_columnas RPAREN
+Rule 3     def_columnas -> columna
+Rule 4     def_columnas -> columna COMMA def_columnas
+Rule 5     columna -> ID tipo opciones_col
+Rule 6     tipo -> INT
+Rule 7     tipo -> VARCHAR LBRACKET NUM RBRACKET
+Rule 8     tipo -> DATE
+Rule 9     tipo -> ARRAY LBRACKET FLOAT RBRACKET
+Rule 10    tipo -> TEXT
+Rule 11    tipo -> FLOAT
+Rule 12    opciones_col -> <empty>
+Rule 13    opciones_col -> KEY
+Rule 14    opciones_col -> KEY INDEX tipo_indice
+Rule 15    opciones_col -> INDEX tipo_indice
+Rule 16    tipo_indice -> SEQ
+Rule 17    tipo_indice -> BTREE
+Rule 18    tipo_indice -> RTREE
+Rule 19    tipo_indice -> AVL
+Rule 20    tipo_indice -> ISAM
+Rule 21    tipo_indice -> HASH
+Rule 22    sentencia -> CREATE TABLE ID FROM FILE CADENA USING INDEX ID LPAREN CADENA RPAREN
+Rule 23    sentencia -> SELECT columns FROM ID condicion_where
+Rule 24    columns -> ASTERISCO
+Rule 25    columns -> ID
+Rule 26    columns -> ID COMMA columns
+Rule 27    condicion_where -> <empty>
+Rule 28    condicion_where -> WHERE condicion
+Rule 29    condicion -> ID EQUAL valor
+Rule 30    condicion -> ID BETWEEN valor AND valor
+Rule 31    condicion -> ID IN LPAREN valor COMMA valor RPAREN
+Rule 32    valor -> NUM
+Rule 33    valor -> FLOATVAL
+Rule 34    valor -> CADENA
+Rule 35    sentencia -> INSERT INTO ID VALUES LPAREN valores RPAREN
+Rule 36    valores -> valor
+Rule 37    valores -> valor COMMA valores
+Rule 38    sentencia -> DELETE FROM ID WHERE condicion
+
+Terminals, with rules where they appear
+
+AND                  : 30
+ARRAY                : 9
+ASTERISCO            : 24
+AVL                  : 19
+BETWEEN              : 30
+BTREE                : 17
+CADENA               : 22 22 34
+COMMA                : 4 26 31 37
+CREATE               : 2 22
+DATE                 : 8
+DELETE               : 38
+EQUAL                : 29
+FILE                 : 22
+FLOAT                : 9 11
+FLOATVAL             : 33
+FROM                 : 22 23 38
+HASH                 : 21
+ID                   : 2 5 22 22 23 25 26 29 30 31 35 38
+IN                   : 31
+INDEX                : 14 15 22
+INSERT               : 35
+INT                  : 6
+INTO                 : 35
+ISAM                 : 20
+KEY                  : 13 14
+LBRACKET             : 7 9
+LPAREN               : 2 22 31 35
+NUM                  : 7 32
+RBRACKET             : 7 9
+RPAREN               : 2 22 31 35
+RTREE                : 18
+SELECT               : 23
+SEQ                  : 16
+TABLE                : 2 22
+TEXT                 : 10
+USING                : 22
+VALUES               : 35
+VARCHAR              : 7
+WHERE                : 28 38
+error                : 
+
+Nonterminals, with rules where they appear
+
+columna              : 3 4
+columns              : 23 26
+condicion            : 28 38
+condicion_where      : 23
+def_columnas         : 2 4
+opciones_col         : 5
+programa             : 0
+sentencia            : 1
+tipo                 : 5
+tipo_indice          : 14 15
+valor                : 29 30 30 31 31 36 37
+valores              : 35 37
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . programa
+    (1) programa -> . sentencia
+    (2) sentencia -> . CREATE TABLE ID LPAREN def_columnas RPAREN
+    (22) sentencia -> . CREATE TABLE ID FROM FILE CADENA USING INDEX ID LPAREN CADENA RPAREN
+    (23) sentencia -> . SELECT columns FROM ID condicion_where
+    (35) sentencia -> . INSERT INTO ID VALUES LPAREN valores RPAREN
+    (38) sentencia -> . DELETE FROM ID WHERE condicion
+
+    CREATE          shift and go to state 3
+    SELECT          shift and go to state 4
+    INSERT          shift and go to state 5
+    DELETE          shift and go to state 6
+
+    programa                       shift and go to state 1
+    sentencia                      shift and go to state 2
+
+state 1
+
+    (0) S' -> programa .
+
+
+
+state 2
+
+    (1) programa -> sentencia .
+
+    $end            reduce using rule 1 (programa -> sentencia .)
+
+
+state 3
+
+    (2) sentencia -> CREATE . TABLE ID LPAREN def_columnas RPAREN
+    (22) sentencia -> CREATE . TABLE ID FROM FILE CADENA USING INDEX ID LPAREN CADENA RPAREN
+
+    TABLE           shift and go to state 7
+
+
+state 4
+
+    (23) sentencia -> SELECT . columns FROM ID condicion_where
+    (24) columns -> . ASTERISCO
+    (25) columns -> . ID
+    (26) columns -> . ID COMMA columns
+
+    ASTERISCO       shift and go to state 10
+    ID              shift and go to state 9
+
+    columns                        shift and go to state 8
+
+state 5
+
+    (35) sentencia -> INSERT . INTO ID VALUES LPAREN valores RPAREN
+
+    INTO            shift and go to state 11
+
+
+state 6
+
+    (38) sentencia -> DELETE . FROM ID WHERE condicion
+
+    FROM            shift and go to state 12
+
+
+state 7
+
+    (2) sentencia -> CREATE TABLE . ID LPAREN def_columnas RPAREN
+    (22) sentencia -> CREATE TABLE . ID FROM FILE CADENA USING INDEX ID LPAREN CADENA RPAREN
+
+    ID              shift and go to state 13
+
+
+state 8
+
+    (23) sentencia -> SELECT columns . FROM ID condicion_where
+
+    FROM            shift and go to state 14
+
+
+state 9
+
+    (25) columns -> ID .
+    (26) columns -> ID . COMMA columns
+
+    FROM            reduce using rule 25 (columns -> ID .)
+    COMMA           shift and go to state 15
+
+
+state 10
+
+    (24) columns -> ASTERISCO .
+
+    FROM            reduce using rule 24 (columns -> ASTERISCO .)
+
+
+state 11
+
+    (35) sentencia -> INSERT INTO . ID VALUES LPAREN valores RPAREN
+
+    ID              shift and go to state 16
+
+
+state 12
+
+    (38) sentencia -> DELETE FROM . ID WHERE condicion
+
+    ID              shift and go to state 17
+
+
+state 13
+
+    (2) sentencia -> CREATE TABLE ID . LPAREN def_columnas RPAREN
+    (22) sentencia -> CREATE TABLE ID . FROM FILE CADENA USING INDEX ID LPAREN CADENA RPAREN
+
+    LPAREN          shift and go to state 18
+    FROM            shift and go to state 19
+
+
+state 14
+
+    (23) sentencia -> SELECT columns FROM . ID condicion_where
+
+    ID              shift and go to state 20
+
+
+state 15
+
+    (26) columns -> ID COMMA . columns
+    (24) columns -> . ASTERISCO
+    (25) columns -> . ID
+    (26) columns -> . ID COMMA columns
+
+    ASTERISCO       shift and go to state 10
+    ID              shift and go to state 9
+
+    columns                        shift and go to state 21
+
+state 16
+
+    (35) sentencia -> INSERT INTO ID . VALUES LPAREN valores RPAREN
+
+    VALUES          shift and go to state 22
+
+
+state 17
+
+    (38) sentencia -> DELETE FROM ID . WHERE condicion
+
+    WHERE           shift and go to state 23
+
+
+state 18
+
+    (2) sentencia -> CREATE TABLE ID LPAREN . def_columnas RPAREN
+    (3) def_columnas -> . columna
+    (4) def_columnas -> . columna COMMA def_columnas
+    (5) columna -> . ID tipo opciones_col
+
+    ID              shift and go to state 24
+
+    def_columnas                   shift and go to state 25
+    columna                        shift and go to state 26
+
+state 19
+
+    (22) sentencia -> CREATE TABLE ID FROM . FILE CADENA USING INDEX ID LPAREN CADENA RPAREN
+
+    FILE            shift and go to state 27
+
+
+state 20
+
+    (23) sentencia -> SELECT columns FROM ID . condicion_where
+    (27) condicion_where -> .
+    (28) condicion_where -> . WHERE condicion
+
+    $end            reduce using rule 27 (condicion_where -> .)
+    WHERE           shift and go to state 29
+
+    condicion_where                shift and go to state 28
+
+state 21
+
+    (26) columns -> ID COMMA columns .
+
+    FROM            reduce using rule 26 (columns -> ID COMMA columns .)
+
+
+state 22
+
+    (35) sentencia -> INSERT INTO ID VALUES . LPAREN valores RPAREN
+
+    LPAREN          shift and go to state 30
+
+
+state 23
+
+    (38) sentencia -> DELETE FROM ID WHERE . condicion
+    (29) condicion -> . ID EQUAL valor
+    (30) condicion -> . ID BETWEEN valor AND valor
+    (31) condicion -> . ID IN LPAREN valor COMMA valor RPAREN
+
+    ID              shift and go to state 31
+
+    condicion                      shift and go to state 32
+
+state 24
+
+    (5) columna -> ID . tipo opciones_col
+    (6) tipo -> . INT
+    (7) tipo -> . VARCHAR LBRACKET NUM RBRACKET
+    (8) tipo -> . DATE
+    (9) tipo -> . ARRAY LBRACKET FLOAT RBRACKET
+    (10) tipo -> . TEXT
+    (11) tipo -> . FLOAT
+
+    INT             shift and go to state 34
+    VARCHAR         shift and go to state 35
+    DATE            shift and go to state 36
+    ARRAY           shift and go to state 37
+    TEXT            shift and go to state 39
+    FLOAT           shift and go to state 38
+
+    tipo                           shift and go to state 33
+
+state 25
+
+    (2) sentencia -> CREATE TABLE ID LPAREN def_columnas . RPAREN
+
+    RPAREN          shift and go to state 40
+
+
+state 26
+
+    (3) def_columnas -> columna .
+    (4) def_columnas -> columna . COMMA def_columnas
+
+    RPAREN          reduce using rule 3 (def_columnas -> columna .)
+    COMMA           shift and go to state 41
+
+
+state 27
+
+    (22) sentencia -> CREATE TABLE ID FROM FILE . CADENA USING INDEX ID LPAREN CADENA RPAREN
+
+    CADENA          shift and go to state 42
+
+
+state 28
+
+    (23) sentencia -> SELECT columns FROM ID condicion_where .
+
+    $end            reduce using rule 23 (sentencia -> SELECT columns FROM ID condicion_where .)
+
+
+state 29
+
+    (28) condicion_where -> WHERE . condicion
+    (29) condicion -> . ID EQUAL valor
+    (30) condicion -> . ID BETWEEN valor AND valor
+    (31) condicion -> . ID IN LPAREN valor COMMA valor RPAREN
+
+    ID              shift and go to state 31
+
+    condicion                      shift and go to state 43
+
+state 30
+
+    (35) sentencia -> INSERT INTO ID VALUES LPAREN . valores RPAREN
+    (36) valores -> . valor
+    (37) valores -> . valor COMMA valores
+    (32) valor -> . NUM
+    (33) valor -> . FLOATVAL
+    (34) valor -> . CADENA
+
+    NUM             shift and go to state 46
+    FLOATVAL        shift and go to state 47
+    CADENA          shift and go to state 48
+
+    valores                        shift and go to state 44
+    valor                          shift and go to state 45
+
+state 31
+
+    (29) condicion -> ID . EQUAL valor
+    (30) condicion -> ID . BETWEEN valor AND valor
+    (31) condicion -> ID . IN LPAREN valor COMMA valor RPAREN
+
+    EQUAL           shift and go to state 49
+    BETWEEN         shift and go to state 50
+    IN              shift and go to state 51
+
+
+state 32
+
+    (38) sentencia -> DELETE FROM ID WHERE condicion .
+
+    $end            reduce using rule 38 (sentencia -> DELETE FROM ID WHERE condicion .)
+
+
+state 33
+
+    (5) columna -> ID tipo . opciones_col
+    (12) opciones_col -> .
+    (13) opciones_col -> . KEY
+    (14) opciones_col -> . KEY INDEX tipo_indice
+    (15) opciones_col -> . INDEX tipo_indice
+
+    COMMA           reduce using rule 12 (opciones_col -> .)
+    RPAREN          reduce using rule 12 (opciones_col -> .)
+    KEY             shift and go to state 53
+    INDEX           shift and go to state 54
+
+    opciones_col                   shift and go to state 52
+
+state 34
+
+    (6) tipo -> INT .
+
+    KEY             reduce using rule 6 (tipo -> INT .)
+    INDEX           reduce using rule 6 (tipo -> INT .)
+    COMMA           reduce using rule 6 (tipo -> INT .)
+    RPAREN          reduce using rule 6 (tipo -> INT .)
+
+
+state 35
+
+    (7) tipo -> VARCHAR . LBRACKET NUM RBRACKET
+
+    LBRACKET        shift and go to state 55
+
+
+state 36
+
+    (8) tipo -> DATE .
+
+    KEY             reduce using rule 8 (tipo -> DATE .)
+    INDEX           reduce using rule 8 (tipo -> DATE .)
+    COMMA           reduce using rule 8 (tipo -> DATE .)
+    RPAREN          reduce using rule 8 (tipo -> DATE .)
+
+
+state 37
+
+    (9) tipo -> ARRAY . LBRACKET FLOAT RBRACKET
+
+    LBRACKET        shift and go to state 56
+
+
+state 38
+
+    (11) tipo -> FLOAT .
+
+    KEY             reduce using rule 11 (tipo -> FLOAT .)
+    INDEX           reduce using rule 11 (tipo -> FLOAT .)
+    COMMA           reduce using rule 11 (tipo -> FLOAT .)
+    RPAREN          reduce using rule 11 (tipo -> FLOAT .)
+
+
+state 39
+
+    (10) tipo -> TEXT .
+
+    KEY             reduce using rule 10 (tipo -> TEXT .)
+    INDEX           reduce using rule 10 (tipo -> TEXT .)
+    COMMA           reduce using rule 10 (tipo -> TEXT .)
+    RPAREN          reduce using rule 10 (tipo -> TEXT .)
+
+
+state 40
+
+    (2) sentencia -> CREATE TABLE ID LPAREN def_columnas RPAREN .
+
+    $end            reduce using rule 2 (sentencia -> CREATE TABLE ID LPAREN def_columnas RPAREN .)
+
+
+state 41
+
+    (4) def_columnas -> columna COMMA . def_columnas
+    (3) def_columnas -> . columna
+    (4) def_columnas -> . columna COMMA def_columnas
+    (5) columna -> . ID tipo opciones_col
+
+    ID              shift and go to state 24
+
+    columna                        shift and go to state 26
+    def_columnas                   shift and go to state 57
+
+state 42
+
+    (22) sentencia -> CREATE TABLE ID FROM FILE CADENA . USING INDEX ID LPAREN CADENA RPAREN
+
+    USING           shift and go to state 58
+
+
+state 43
+
+    (28) condicion_where -> WHERE condicion .
+
+    $end            reduce using rule 28 (condicion_where -> WHERE condicion .)
+
+
+state 44
+
+    (35) sentencia -> INSERT INTO ID VALUES LPAREN valores . RPAREN
+
+    RPAREN          shift and go to state 59
+
+
+state 45
+
+    (36) valores -> valor .
+    (37) valores -> valor . COMMA valores
+
+    RPAREN          reduce using rule 36 (valores -> valor .)
+    COMMA           shift and go to state 60
+
+
+state 46
+
+    (32) valor -> NUM .
+
+    COMMA           reduce using rule 32 (valor -> NUM .)
+    RPAREN          reduce using rule 32 (valor -> NUM .)
+    $end            reduce using rule 32 (valor -> NUM .)
+    AND             reduce using rule 32 (valor -> NUM .)
+
+
+state 47
+
+    (33) valor -> FLOATVAL .
+
+    COMMA           reduce using rule 33 (valor -> FLOATVAL .)
+    RPAREN          reduce using rule 33 (valor -> FLOATVAL .)
+    $end            reduce using rule 33 (valor -> FLOATVAL .)
+    AND             reduce using rule 33 (valor -> FLOATVAL .)
+
+
+state 48
+
+    (34) valor -> CADENA .
+
+    COMMA           reduce using rule 34 (valor -> CADENA .)
+    RPAREN          reduce using rule 34 (valor -> CADENA .)
+    $end            reduce using rule 34 (valor -> CADENA .)
+    AND             reduce using rule 34 (valor -> CADENA .)
+
+
+state 49
+
+    (29) condicion -> ID EQUAL . valor
+    (32) valor -> . NUM
+    (33) valor -> . FLOATVAL
+    (34) valor -> . CADENA
+
+    NUM             shift and go to state 46
+    FLOATVAL        shift and go to state 47
+    CADENA          shift and go to state 48
+
+    valor                          shift and go to state 61
+
+state 50
+
+    (30) condicion -> ID BETWEEN . valor AND valor
+    (32) valor -> . NUM
+    (33) valor -> . FLOATVAL
+    (34) valor -> . CADENA
+
+    NUM             shift and go to state 46
+    FLOATVAL        shift and go to state 47
+    CADENA          shift and go to state 48
+
+    valor                          shift and go to state 62
+
+state 51
+
+    (31) condicion -> ID IN . LPAREN valor COMMA valor RPAREN
+
+    LPAREN          shift and go to state 63
+
+
+state 52
+
+    (5) columna -> ID tipo opciones_col .
+
+    COMMA           reduce using rule 5 (columna -> ID tipo opciones_col .)
+    RPAREN          reduce using rule 5 (columna -> ID tipo opciones_col .)
+
+
+state 53
+
+    (13) opciones_col -> KEY .
+    (14) opciones_col -> KEY . INDEX tipo_indice
+
+    COMMA           reduce using rule 13 (opciones_col -> KEY .)
+    RPAREN          reduce using rule 13 (opciones_col -> KEY .)
+    INDEX           shift and go to state 64
+
+
+state 54
+
+    (15) opciones_col -> INDEX . tipo_indice
+    (16) tipo_indice -> . SEQ
+    (17) tipo_indice -> . BTREE
+    (18) tipo_indice -> . RTREE
+    (19) tipo_indice -> . AVL
+    (20) tipo_indice -> . ISAM
+    (21) tipo_indice -> . HASH
+
+    SEQ             shift and go to state 66
+    BTREE           shift and go to state 67
+    RTREE           shift and go to state 68
+    AVL             shift and go to state 69
+    ISAM            shift and go to state 70
+    HASH            shift and go to state 71
+
+    tipo_indice                    shift and go to state 65
+
+state 55
+
+    (7) tipo -> VARCHAR LBRACKET . NUM RBRACKET
+
+    NUM             shift and go to state 72
+
+
+state 56
+
+    (9) tipo -> ARRAY LBRACKET . FLOAT RBRACKET
+
+    FLOAT           shift and go to state 73
+
+
+state 57
+
+    (4) def_columnas -> columna COMMA def_columnas .
+
+    RPAREN          reduce using rule 4 (def_columnas -> columna COMMA def_columnas .)
+
+
+state 58
+
+    (22) sentencia -> CREATE TABLE ID FROM FILE CADENA USING . INDEX ID LPAREN CADENA RPAREN
+
+    INDEX           shift and go to state 74
+
+
+state 59
+
+    (35) sentencia -> INSERT INTO ID VALUES LPAREN valores RPAREN .
+
+    $end            reduce using rule 35 (sentencia -> INSERT INTO ID VALUES LPAREN valores RPAREN .)
+
+
+state 60
+
+    (37) valores -> valor COMMA . valores
+    (36) valores -> . valor
+    (37) valores -> . valor COMMA valores
+    (32) valor -> . NUM
+    (33) valor -> . FLOATVAL
+    (34) valor -> . CADENA
+
+    NUM             shift and go to state 46
+    FLOATVAL        shift and go to state 47
+    CADENA          shift and go to state 48
+
+    valor                          shift and go to state 45
+    valores                        shift and go to state 75
+
+state 61
+
+    (29) condicion -> ID EQUAL valor .
+
+    $end            reduce using rule 29 (condicion -> ID EQUAL valor .)
+
+
+state 62
+
+    (30) condicion -> ID BETWEEN valor . AND valor
+
+    AND             shift and go to state 76
+
+
+state 63
+
+    (31) condicion -> ID IN LPAREN . valor COMMA valor RPAREN
+    (32) valor -> . NUM
+    (33) valor -> . FLOATVAL
+    (34) valor -> . CADENA
+
+    NUM             shift and go to state 46
+    FLOATVAL        shift and go to state 47
+    CADENA          shift and go to state 48
+
+    valor                          shift and go to state 77
+
+state 64
+
+    (14) opciones_col -> KEY INDEX . tipo_indice
+    (16) tipo_indice -> . SEQ
+    (17) tipo_indice -> . BTREE
+    (18) tipo_indice -> . RTREE
+    (19) tipo_indice -> . AVL
+    (20) tipo_indice -> . ISAM
+    (21) tipo_indice -> . HASH
+
+    SEQ             shift and go to state 66
+    BTREE           shift and go to state 67
+    RTREE           shift and go to state 68
+    AVL             shift and go to state 69
+    ISAM            shift and go to state 70
+    HASH            shift and go to state 71
+
+    tipo_indice                    shift and go to state 78
+
+state 65
+
+    (15) opciones_col -> INDEX tipo_indice .
+
+    COMMA           reduce using rule 15 (opciones_col -> INDEX tipo_indice .)
+    RPAREN          reduce using rule 15 (opciones_col -> INDEX tipo_indice .)
+
+
+state 66
+
+    (16) tipo_indice -> SEQ .
+
+    COMMA           reduce using rule 16 (tipo_indice -> SEQ .)
+    RPAREN          reduce using rule 16 (tipo_indice -> SEQ .)
+
+
+state 67
+
+    (17) tipo_indice -> BTREE .
+
+    COMMA           reduce using rule 17 (tipo_indice -> BTREE .)
+    RPAREN          reduce using rule 17 (tipo_indice -> BTREE .)
+
+
+state 68
+
+    (18) tipo_indice -> RTREE .
+
+    COMMA           reduce using rule 18 (tipo_indice -> RTREE .)
+    RPAREN          reduce using rule 18 (tipo_indice -> RTREE .)
+
+
+state 69
+
+    (19) tipo_indice -> AVL .
+
+    COMMA           reduce using rule 19 (tipo_indice -> AVL .)
+    RPAREN          reduce using rule 19 (tipo_indice -> AVL .)
+
+
+state 70
+
+    (20) tipo_indice -> ISAM .
+
+    COMMA           reduce using rule 20 (tipo_indice -> ISAM .)
+    RPAREN          reduce using rule 20 (tipo_indice -> ISAM .)
+
+
+state 71
+
+    (21) tipo_indice -> HASH .
+
+    COMMA           reduce using rule 21 (tipo_indice -> HASH .)
+    RPAREN          reduce using rule 21 (tipo_indice -> HASH .)
+
+
+state 72
+
+    (7) tipo -> VARCHAR LBRACKET NUM . RBRACKET
+
+    RBRACKET        shift and go to state 79
+
+
+state 73
+
+    (9) tipo -> ARRAY LBRACKET FLOAT . RBRACKET
+
+    RBRACKET        shift and go to state 80
+
+
+state 74
+
+    (22) sentencia -> CREATE TABLE ID FROM FILE CADENA USING INDEX . ID LPAREN CADENA RPAREN
+
+    ID              shift and go to state 81
+
+
+state 75
+
+    (37) valores -> valor COMMA valores .
+
+    RPAREN          reduce using rule 37 (valores -> valor COMMA valores .)
+
+
+state 76
+
+    (30) condicion -> ID BETWEEN valor AND . valor
+    (32) valor -> . NUM
+    (33) valor -> . FLOATVAL
+    (34) valor -> . CADENA
+
+    NUM             shift and go to state 46
+    FLOATVAL        shift and go to state 47
+    CADENA          shift and go to state 48
+
+    valor                          shift and go to state 82
+
+state 77
+
+    (31) condicion -> ID IN LPAREN valor . COMMA valor RPAREN
+
+    COMMA           shift and go to state 83
+
+
+state 78
+
+    (14) opciones_col -> KEY INDEX tipo_indice .
+
+    COMMA           reduce using rule 14 (opciones_col -> KEY INDEX tipo_indice .)
+    RPAREN          reduce using rule 14 (opciones_col -> KEY INDEX tipo_indice .)
+
+
+state 79
+
+    (7) tipo -> VARCHAR LBRACKET NUM RBRACKET .
+
+    KEY             reduce using rule 7 (tipo -> VARCHAR LBRACKET NUM RBRACKET .)
+    INDEX           reduce using rule 7 (tipo -> VARCHAR LBRACKET NUM RBRACKET .)
+    COMMA           reduce using rule 7 (tipo -> VARCHAR LBRACKET NUM RBRACKET .)
+    RPAREN          reduce using rule 7 (tipo -> VARCHAR LBRACKET NUM RBRACKET .)
+
+
+state 80
+
+    (9) tipo -> ARRAY LBRACKET FLOAT RBRACKET .
+
+    KEY             reduce using rule 9 (tipo -> ARRAY LBRACKET FLOAT RBRACKET .)
+    INDEX           reduce using rule 9 (tipo -> ARRAY LBRACKET FLOAT RBRACKET .)
+    COMMA           reduce using rule 9 (tipo -> ARRAY LBRACKET FLOAT RBRACKET .)
+    RPAREN          reduce using rule 9 (tipo -> ARRAY LBRACKET FLOAT RBRACKET .)
+
+
+state 81
+
+    (22) sentencia -> CREATE TABLE ID FROM FILE CADENA USING INDEX ID . LPAREN CADENA RPAREN
+
+    LPAREN          shift and go to state 84
+
+
+state 82
+
+    (30) condicion -> ID BETWEEN valor AND valor .
+
+    $end            reduce using rule 30 (condicion -> ID BETWEEN valor AND valor .)
+
+
+state 83
+
+    (31) condicion -> ID IN LPAREN valor COMMA . valor RPAREN
+    (32) valor -> . NUM
+    (33) valor -> . FLOATVAL
+    (34) valor -> . CADENA
+
+    NUM             shift and go to state 46
+    FLOATVAL        shift and go to state 47
+    CADENA          shift and go to state 48
+
+    valor                          shift and go to state 85
+
+state 84
+
+    (22) sentencia -> CREATE TABLE ID FROM FILE CADENA USING INDEX ID LPAREN . CADENA RPAREN
+
+    CADENA          shift and go to state 86
+
+
+state 85
+
+    (31) condicion -> ID IN LPAREN valor COMMA valor . RPAREN
+
+    RPAREN          shift and go to state 87
+
+
+state 86
+
+    (22) sentencia -> CREATE TABLE ID FROM FILE CADENA USING INDEX ID LPAREN CADENA . RPAREN
+
+    RPAREN          shift and go to state 88
+
+
+state 87
+
+    (31) condicion -> ID IN LPAREN valor COMMA valor RPAREN .
+
+    $end            reduce using rule 31 (condicion -> ID IN LPAREN valor COMMA valor RPAREN .)
+
+
+state 88
+
+    (22) sentencia -> CREATE TABLE ID FROM FILE CADENA USING INDEX ID LPAREN CADENA RPAREN .
+
+    $end            reduce using rule 22 (sentencia -> CREATE TABLE ID FROM FILE CADENA USING INDEX ID LPAREN CADENA RPAREN .)
+
