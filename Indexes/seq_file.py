@@ -68,7 +68,7 @@ class SeqFile:
     #calcula k para la cantidad actual de records en el file
     def calc_k(self, size_of_record):
         if size_of_record == 0:
-            raise('size_of_record no puede ser 0')
+            raise ValueError('size_of_record no puede ser 0')
         
         cantidad_registros = self.get_num_of_records(size_of_record)
 

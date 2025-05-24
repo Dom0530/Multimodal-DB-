@@ -1,20 +1,31 @@
 import struct
 
 class Record:
-    
     def __init__(self, format, *args):
         self.FORMAT = format
         self.SIZE = struct.calcsize(format)
         self.fields = list(args) if args else []
 
-    # retorna un objeto dado una secuencia de bytes
+
     @staticmethod
     def unpack(bytes_read, format):
-        return Record(format, *struct.unpack(format, bytes_read))
-         
-    # retorna una secuencia de bytes 
+        unpacked = list(struct.unpack(format, bytes_read))
+        fmt_parts = format
+        fmt_types = [c for c in fmt_parts if c.isalpha()]  # Extrae letras del formato
+        for i, typ in enumerate(fmt_types):
+            if typ == 's' and isinstance(unpacked[i], bytes):
+                unpacked[i] = unpacked[i].rstrip(b'\x00').decode('utf-8')  # elimina padding y decodifica
+        return Record(format, *unpacked)
+
     def pack(self):
-        return struct.pack(self.FORMAT, *self.fields)
+        packed_fields = []
+        fmt_parts = self.FORMAT
+        fmt_types = [c for c in fmt_parts if c.isalpha()]
+        for val, typ in zip(self.fields, fmt_types):
+            if typ == 's' and isinstance(val, str):
+                val = val.encode('utf-8')  # codifica el string
+            packed_fields.append(val)
+        return struct.pack(self.FORMAT, *packed_fields)
     
     @property
     def valid(self):
@@ -34,4 +45,4 @@ class Record:
 
 
     def __str__(self):
-        return f"<Record valid={self.valid}, fields={self.fields[1:-1]}, next={self.next_ptr}>"
+        return f"{self.fields}"
