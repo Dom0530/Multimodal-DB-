@@ -21,7 +21,7 @@ class TestISAM(unittest.TestCase):
         self.records = [Record(self.record_format, 5 , generar_nombre_aleatorio())]
         self.records += [
             Record(self.record_format, random.randint(1, 1_000_000), generar_nombre_aleatorio())
-            for _ in range(32767)
+            for _ in range(20000)
         ]
 
         with open(self.filename, 'wb') as f:

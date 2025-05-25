@@ -144,30 +144,29 @@ class Isam:
     def divide(self):
         tmp_file = self.filename + '.tmp'
 
-        # Abrir archivos
         with open(self.filename, 'rb') as file, open(tmp_file, 'w+b') as file2:
             total_records = self.get_num_of_records(file)
-            rpb = math.ceil(total_records / (self.INDEX_BF + 1)**2)
+            highest_rpb = math.ceil(total_records / ((self.INDEX_BF + 1)**2))
+            lowes_rpb = math.floor(total_records / ((self.INDEX_BF + 1)**2))
             
-
+            limit = total_records % ((self.INDEX_BF + 1)**2)
+            rpb = highest_rpb
             block_pos = 0
             i = 0
-            record_count = 0
             file.seek(0)
             while True:
+
+                if block_pos == limit:
+                    rpb = lowes_rpb
+
                 bytes_leidos = file.read(self.record_size)
                 
                 if len(bytes_leidos) < self.record_size:
                     break  # fin del archivo
 
-                try:
-                    record = r.Record.unpack(bytes_leidos, self.record_format)
-                except Exception as e:
-                    
-                    break
+                record = r.Record.unpack(bytes_leidos, self.record_format)
 
                 self.write_record_in_block(file2, block_pos, i, record)
-                record_count += 1
                 i += 1
 
                 if i >= rpb:
@@ -177,12 +176,6 @@ class Isam:
             file2.flush()
             os.fsync(file2.fileno())
         
-
-        # Verifica que el archivo temporal se llenó correctamente
-        if os.path.getsize(tmp_file) < record_count * self.record_size:
-            raise RuntimeError(f"[ERROR] Archivo temporal muy pequeño: {os.path.getsize(tmp_file)} bytes.")
-
-        # Renombrar si todo está bien
         os.remove(self.filename)
         os.rename(tmp_file, self.filename)
        
